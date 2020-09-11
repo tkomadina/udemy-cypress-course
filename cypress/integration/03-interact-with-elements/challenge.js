@@ -6,7 +6,7 @@
   in a certain state, e.g. there should be no todo item in list, 
   or there should be only one, etc.
   💡 don’t forget about documentation https://docs.cypress.io
-*/ 
+*/
 
 /*
   👶 challenge #1: create one todo item 
@@ -15,7 +15,9 @@ it('creates a todo item', () => {
 
   cy
     .visit('localhost:3000');
-  
+
+  cy.get('#add-todo').type("new item{enter}")
+
 });
 
 /* 
@@ -25,7 +27,10 @@ it('completes a todo item (using .click() command)', () => {
 
   cy
     .visit('localhost:3000');
-  
+
+  cy.get('#add-todo').type("new item{enter}")
+  cy.get(':nth-child(2) > .view > .toggle').click()
+
 });
 
 /* 
@@ -35,7 +40,10 @@ it('completes a todo item (using .check() command)', () => {
 
   cy
     .visit('localhost:3000');
-  
+
+  cy.get('[type="checkbox"]').check()
+
+
 });
 
 /*
@@ -46,7 +54,8 @@ it('marks a todo item as not completed (using .uncheck() command)', () => {
 
   cy
     .visit('localhost:3000');
-  
+  cy.get('[type="checkbox"]').uncheck()
+
 });
 
 /*
@@ -57,5 +66,8 @@ it('creates a todo item with the text "buy milk"', () => {
 
   cy
     .visit('localhost:3000');
-  
+
+  cy.get('#add-todo').type("milk{leftarrow}{leftarrow}{leftarrow}{leftarrow}{leftarrow}buy {enter}")
+
+
 });

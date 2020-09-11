@@ -6,9 +6,9 @@
   in a certain state, e.g. there should be checked todo item in list, 
   or there should be only one, etc.
   💡 find common assertions https://docs.cypress.io/guides/references/assertions.html#Common-Assertions
-*/ 
+*/
 
-beforeEach( () => {
+beforeEach(() => {
 
   cy
     .visit('localhost:3000');
@@ -20,7 +20,19 @@ beforeEach( () => {
   ⚠️ start this test with 0 items in list
 */
 it('should create 4 elements', () => {
-  
+
+  cy.get('#add-todo').type("new item{enter}")
+  cy.get('.destroy').click({ multiple: true, force: true })
+
+  cy.get('#add-todo').type("new item{enter}")
+  cy.get('#add-todo').type("do the dishes{enter}")
+  cy.get('#add-todo').type("call plumber{enter}")
+  cy.get('#add-todo').type("get covers for sofas{enter}")
+
+
+  cy.get('.todo')
+    .should('have.length', 4)
+
 });
 
 /*
@@ -30,7 +42,13 @@ it('should create 4 elements', () => {
   ⚠️ start this test with 1 unchecked item
 */
 it('has a checked todo item', () => {
-  
+  cy.get('#add-todo').type("new item{enter}")
+  cy.get('.destroy').click({ multiple: true, force: true })
+
+  cy.get('#add-todo').type("new item{enter}")
+
+  cy.get('.toggle').check().should('be.checked')
+
 });
 
 /* 
@@ -38,7 +56,16 @@ it('has a checked todo item', () => {
   you will find the right assertion in the documentation
 */
 it('should delete todo item and check it does not exist', () => {
-  
+
+  cy.get('#add-todo').type("new item{enter}")
+  cy.get('.destroy').click({ multiple: true, force: true })
+
+  cy.get('#add-todo').type("new item{enter}")
+
+  cy.get('.destroy').click({ force: true })
+
+  cy.get('.todo').should('not.exist')
+
 });
 
 /* 
@@ -47,14 +74,18 @@ it('should delete todo item and check it does not exist', () => {
   find it in docs!)
 */
 it('should check for text "Evan You"', () => {
-  
+
+  cy.get('footer').should('contain', "Evan You")
+
 });
 
 /* 
   🦸‍♂️ challenge #5: check the color of heading. the color code is rgb(184, 63, 69)
 */
 it('should check heading color', () => {
-  
+  cy.get('h1').should('have.css', 'color', 'rgb(184, 63, 69)')
+
+
 });
 
 /*
@@ -62,6 +93,15 @@ it('should check heading color', () => {
   for "greater than" is "gte" or "least")
   ⚠️ start this test with at least 5 items in todo list
 */
-it('should have more than 4 elements', () => {
-  
+it.only('should have more than 4 elements', () => {
+
+  cy.get('#add-todo').type("new item{enter}")
+  cy.get('#add-todo').type("do the dishes{enter}")
+  cy.get('#add-todo').type("call plumber{enter}")
+  cy.get('#add-todo').type("get covers for sofas{enter}")
+  cy.get('#add-todo').type("feed the cat{enter}")
+
+  cy.get('.todo').its('length').should('be.gte', 5)
+
+
 });

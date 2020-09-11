@@ -14,22 +14,22 @@ it('gets element on page', () => {
 
   // 👶 challenge #1: select a todo element using tag "li" (list item)
   cy
-    .get('');
-  
+    .get('li');
+
   // 👦 challenge #2: select a todo element using class
   cy
-    .get('');
+    .get('.todo');
 
   // 👨 challenge #3: select checkbox inside todo element by using class
   cy
-    .get('');
+    .get('.destroy');
 
   // 🤓 challenge #4: select checkbox inside todo element by using "checkbox" attribute
   cy
-    .get('');
+    .get('[type="checkbox"]');
 
   // 🦸‍♂️ challenge #5: select a todo element by relation (complete selector, don’t delete "ul")
   cy
-    .get('ul');
-   
+    .get('ul li');
+
 });

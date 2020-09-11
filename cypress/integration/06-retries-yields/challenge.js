@@ -4,9 +4,9 @@
   ⚠️ remember you can run single test by using it.only
   📚 this challenge includes working with documentation. you can find it on https://docs.cypress.io, use https://on.cypress.io/<command> or find a command via autocomplete
   💡 there are additional explanations for video in final.js file of this chapter which might help with this challenge
-*/ 
+*/
 
-beforeEach( () => {
+beforeEach(() => {
 
   cy
     .visit('localhost:3000');
@@ -20,9 +20,18 @@ beforeEach( () => {
 */
 it('Selects first item in list', () => {
 
+  cy.get('#add-todo').type("new item{enter}")
+  cy.get('.destroy').click({ multiple: true, force: true })
+
+  cy.get('#add-todo').type("new item 1{enter}")
+  cy.get('#add-todo').type("new item 2{enter}")
+
   cy
-    .get('.todo');
-  
+    .get('.todo-list')
+    .find('li')
+    .eq(0)
+    .contains('new item 1')
+
 });
 
 /*
@@ -33,8 +42,11 @@ it('Selects first item in list', () => {
 it('Selects last item in list', () => {
 
   cy
-    .get('.todo');
-  
+    .get('.todo-list')
+    .find('li')
+    .last()
+    .contains("new item 2")
+
 });
 
 /*
@@ -44,9 +56,14 @@ it('Selects last item in list', () => {
 */
 it('Selects third todo item', () => {
 
+  cy.get('#add-todo').type("new item 1{enter}")
+  cy.get('#add-todo').type("new item 2{enter}")
+
   cy
-    .get('.todo');
-  
+    .get('.todo-list')
+    .find('li')
+    .eq(2)
+
 });
 
 /*
@@ -55,9 +72,22 @@ it('Selects third todo item', () => {
   by first geting .todo
 */
 it('Selects the first item and then the next or previous item', () => {
-  
+
+  // cy.get('#add-todo').type("new item 1{enter}")
+  // cy.get('#add-todo').type("new item 2{enter}")
+  // cy.get('#add-todo').type("new item 1{enter}")
+  // cy.get('#add-todo').type("new item 2{enter}")
+
   cy
-    .get('.todo');
+    .get('.todo')
+    .siblings()
+    .first()
+    .contains("new item 1")
+    .parent()
+    .parent()
+    .next()
+    .contains("new item 2")
+
 
 });
 
@@ -65,10 +95,13 @@ it('Selects the first item and then the next or previous item', () => {
   🦸‍♀ challenge #5: start test with no todo in list and add timeout to 
   .get() command. make the test pass by adding todo item (as demonstrated in video)
 */
-it('Has one element in todo list', () => {
+it.only('Has one element in todo list', () => {
+
+  cy.get('#add-todo').type("new item{enter}")
+  cy.get('.destroy').click({ multiple: true, force: true })
 
   cy
-    .get('.todo')
+    .get('.todo', { timeout: 30000 })
     .should('have.length', 1);
-  
+
 });
