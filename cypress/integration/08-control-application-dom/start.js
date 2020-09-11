@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-beforeEach( () => {
+beforeEach(() => {
 
   cy
     .visit('localhost:3000');
@@ -8,24 +8,41 @@ beforeEach( () => {
 });
 
 it('has a delete icon (solution 1)', () => {
+  cy.get('#add-todo').type("new item{enter}")
+  cy.get('.destroy').click({ multiple: true, force: true })
+
+  cy.get('#add-todo').type("buy milk{enter}")
 
   cy
+    .get('.todo')
+    .trigger('mouseover')
+  cy
     .get('.destroy')
-    .should('exist');
-  
+    .should('be.visible')
+
+  cy
+    .get('.todo')
+    .trigger('mouseout')
+  cy
+    .get('.destroy')
+    .should('not.be.visible')
+
+
 });
 
 it('has a delete icon (solution 2)', () => {
 
   cy
-    .get('.destroy');
+    .get('.destroy')
+    .invoke('show')
 
 });
 
-it('has a link to application author', () => {
+it.only('has a link to application author', () => {
 
   cy
     .contains('Evan You')
-    .click();
-  
+    .invoke('removeAttr', 'target')
+
+
 });

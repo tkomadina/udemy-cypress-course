@@ -12,9 +12,16 @@
   0 todo items. it may be annoying at this point, but good news 
   is that in following chapters, we will learn how to reset our 
   app so we always start in the desired state 😎
-*/ 
+*/
 
-beforeEach( () => {
+beforeEach(() => {
+
+  cy.server()
+  cy
+    .route('GET', '/todos').as('getTodos')
+    .route('POST', '/todos').as('postTodos')
+    .route('PATCH', '/todos/**').as('change')
+
 
   cy
     .visit('localhost:3000');
@@ -26,7 +33,15 @@ beforeEach( () => {
   returns status 200
 */
 it('retreives a list of todo items', () => {
-  
+  cy.get('#add-todo').type("new item{enter}")
+  cy.get('.destroy').click({ multiple: true, force: true })
+
+  cy.wait("@getTodos")
+    .then(getTodos => {
+      expect(getTodos.status).to.eq(200)
+    })
+
+
 });
 
 /* 
@@ -38,7 +53,12 @@ it('creates a todo item', () => {
   cy
     .get('.new-todo')
     .type('buy milk{enter}');
-  
+
+  cy.wait('@postTodos')
+    .then(postTodo => {
+      expect(postTodo.response.body.title).to.eq("buy milk")
+    })
+
 });
 
 /* 
@@ -51,14 +71,23 @@ it('creates a todo item', () => {
   cy
     .get('.new-todo')
     .type('buy milk{enter}');
-  
+
+  cy.wait('@postTodos')
+    .then(postTodo => {
+      expect(postTodo.request.body.title).to.eq("buy milk")
+    })
+
 });
 
 /* 
   🤓 challenge #4: create test that checks a request that is sent 
   when a todo item is completed
 */
-it('completes a todo item', () => {
+it.only('completes a todo item', () => {
+
+  cy.get('#add-todo').type("new item{enter}")
+  cy.get('.destroy').click({ multiple: true, force: true })
+
 
   cy
     .get('.new-todo')
@@ -67,7 +96,13 @@ it('completes a todo item', () => {
   cy
     .get('.toggle')
     .click();
-  
+
+  cy.wait("@change")
+    .then(todochange => {
+      expect(todochange.request.body.completed).to.be.true
+    })
+
+
 });
 
 /* 
@@ -88,5 +123,5 @@ it('completes a todo item', () => {
 
   cy
     .wait(); // wait for both requests and make assertions on titles
-  
+
 });

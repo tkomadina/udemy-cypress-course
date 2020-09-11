@@ -4,9 +4,9 @@
   ⚠️ remember you can run single test by using it.only
   ⚠️ some of these test require you to have some todo items 
   already in app. you can probably figure out which these are 🙂
-*/ 
+*/
 
-beforeEach( () => {
+beforeEach(() => {
 
   cy
     .visit('localhost:3000');
@@ -22,17 +22,20 @@ it('have delete icon', () => {
   cy
     .get('.destroy')
     .invoke('show');
-    
+
   cy
     .get('.destroy')
     .should('be.visible');
 
   // add code here
 
+  cy.get(".destroy")
+    .invoke("hide")
+
   cy
     .get('.destroy')
-    .should('be.visible');
-  
+    .should('not.be.visible');
+
 });
 
 /* 
@@ -42,12 +45,12 @@ it('have delete icon', () => {
 it('deletes a todo item', () => {
 
   cy
-    .get('.todo');
-    
+    .get('.todo')
+    .trigger("mouseover")
+
   cy
     .get('.destroy')
-    .should('not.be.visible');
-  
+    .click()
 });
 
 /* 
@@ -59,8 +62,8 @@ it('completes a todo item', () => {
 
   cy
     .get('.todo')
-    .invoke(); // add correct argument here
-  
+    .invoke("attr", "class", "completed"); // add correct argument here
+
 });
 
 /* 
@@ -68,10 +71,13 @@ it('completes a todo item', () => {
   without using the command .type() all you need to do is to invoke 
   value of the ".new-todo" element
 */
-it('add text into new todo field', () => {
+it.only('add text into new todo field', () => {
 
   cy
     .get('.new-todo')
-    .invoke(); // add correct argument here
-  
+    .trigger('focus')
+    .invoke("attr", "value", "test")
+
+  // add correct argument here
+
 });

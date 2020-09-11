@@ -71,22 +71,22 @@ it('Selects third todo item', () => {
   elements. find them in documentation and try them out. start the test 
   by first geting .todo
 */
-it('Selects the first item and then the next or previous item', () => {
+it.only('Selects the first item and then the next or previous item', () => {
 
-  // cy.get('#add-todo').type("new item 1{enter}")
-  // cy.get('#add-todo').type("new item 2{enter}")
-  // cy.get('#add-todo').type("new item 1{enter}")
-  // cy.get('#add-todo').type("new item 2{enter}")
+  cy.get('#add-todo').type("new item 1{enter}")
+  cy.get('#add-todo').type("new item 2{enter}")
+  cy.get('#add-todo').type("new item 1{enter}")
+  cy.get('#add-todo').type("new item 2{enter}")
 
   cy
     .get('.todo')
     .siblings()
     .first()
-    .contains("new item 1")
-    .parent()
-    .parent()
+    .should("contain", "new item 1")
+    // .parent()
+    // .parent()
     .next()
-    .contains("new item 2")
+    .should("contain", "new item 2")
 
 
 });
@@ -95,7 +95,7 @@ it('Selects the first item and then the next or previous item', () => {
   🦸‍♀ challenge #5: start test with no todo in list and add timeout to 
   .get() command. make the test pass by adding todo item (as demonstrated in video)
 */
-it.only('Has one element in todo list', () => {
+it('Has one element in todo list', () => {
 
   cy.get('#add-todo').type("new item{enter}")
   cy.get('.destroy').click({ multiple: true, force: true })

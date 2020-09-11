@@ -3,9 +3,9 @@
 /* 
   ⚠️ remember you can run single test by using it.only
   📚 I encourage you to use cypress documentation, especially https://on.cypress.io/assertions
-*/ 
+*/
 
-beforeEach( () => {
+beforeEach(() => {
 
   cy
     .visit('localhost:3000');
@@ -16,10 +16,19 @@ beforeEach( () => {
   👶 challenge #1: check the text using .then() command
 */
 it('Checks a text todo item', () => {
+  cy.get('#add-todo').type("new item{enter}")
+  cy.get('.destroy').click({ multiple: true, force: true })
+
+  cy.get('#add-todo').type("buy milk{enter}")
+  cy.get('#add-todo').type("wash dishes{enter}")
+  cy.get('#add-todo').type("create todos list{enter}")
 
   cy
-    .get('.todo');
-  
+    .get('.todo')
+    .then(todo => {
+      expect(todo[0]).to.contain.text("buy milk")
+    })
+
 });
 
 /*
@@ -27,10 +36,21 @@ it('Checks a text todo item', () => {
   ⚠️ make sure you have some todo items in the list before you start this test
 */
 it('Checks a texts of all todo items', () => {
+  cy.get('#add-todo').type("new item{enter}")
+  cy.get('.destroy').click({ multiple: true, force: true })
+
+  cy.get('#add-todo').type("buy milk{enter}")
+  cy.get('#add-todo').type("wash dishes{enter}")
+  cy.get('#add-todo').type("create todos list{enter}")
 
   cy
-    .get('.todo');
-  
+    .get('.todo')
+    .then(todo => {
+      expect(todo[0]).to.contain.text("buy milk")
+      expect(todo[1]).to.contain.text("wash dishes")
+      expect(todo[2]).to.contain.text("create todos list")
+    })
+
 });
 
 /* 
@@ -40,9 +60,21 @@ it('Checks a texts of all todo items', () => {
 */
 it('Checks a texts of first and last todo items', () => {
 
+  cy.get('#add-todo').type("new item{enter}")
+  cy.get('.destroy').click({ multiple: true, force: true })
+
+  cy.get('#add-todo').type("buy milk{enter}")
+  cy.get('#add-todo').type("wash dishes{enter}")
+  cy.get('#add-todo').type("create todos list{enter}")
+
   cy
-    .get('.todo');
-  
+    .get('.todo')
+    .then(todo => {
+      expect(todo[0]).to.contain.text("buy milk")
+      expect(todo[2]).to.contain.text("create todos list")
+    })
+
+
 });
 
 /* 
@@ -55,9 +87,10 @@ it('Has first todo item with text "wash dishes"', () => {
 
   cy
     .get('.todo')
+    .contains("wash dishes")
     .eq(0)
     .should('contain.text', 'wash dishes');
-  
+
 });
 
 /* 
@@ -68,12 +101,12 @@ it('Has first todo item with text "wash dishes"', () => {
 it('Have two todo items with particular texts', () => {
 
   cy
-    .get('.todo', {timeout: 30000})
-    .should( items => {
+    .get('.todo', { timeout: 30000 })
+    .should(items => {
 
       // check item 1
       // check item 2
 
     });
-  
+
 });
