@@ -83,7 +83,7 @@ it('creates a todo item', () => {
   🤓 challenge #4: create test that checks a request that is sent 
   when a todo item is completed
 */
-it.only('completes a todo item', () => {
+it('completes a todo item', () => {
 
   cy.get('#add-todo').type("new item{enter}")
   cy.get('.destroy').click({ multiple: true, force: true })
@@ -111,7 +111,7 @@ it.only('completes a todo item', () => {
   them both. example on how to do thiw can be found in documentation:
   https://on.cypress.io/wait#You-can-pass-an-array-of-aliases-that-will-be-waited-on-before-resolving
 */
-it('completes a todo item', () => {
+it.only('completes a todo item', () => {
 
   cy
     .get('.new-todo')
@@ -122,6 +122,15 @@ it('completes a todo item', () => {
     .type('wash dishes{enter}');
 
   cy
-    .wait(); // wait for both requests and make assertions on titles
+    .wait(["@postTodos", "@postTodos"])
+    .then(todo => {
+      expect(todo[0].request.body.title).to.eq("buy milk")
+      expect(todo[1].response.body.title).to.eq("wash dishes")
+    }); // wait for both requests and make assertions on titles
+
+
+
+
+});
 
 });

@@ -7,9 +7,43 @@
   commands before you open your app, or more precisely - before 
   the request you want to route occurs. in case of GET /todos
   request, it is at the moment of opening our application
-*/ 
+*/
 
-beforeEach( () => {
+beforeEach(() => {
+  cy.server()
+
+  // case 2
+  // cy.route({
+  //   method: 'GET',
+  //   url: '/todos',
+  //   response: 'fx:tisa-test'
+  // }).as('testList')
+
+  // //case 3
+  // cy.route({
+  //   method: 'POST',
+  //   url: '/todos',
+  //   response: [],
+  //   status: 500
+  // }).as('errorList')
+
+  // case 4
+  // -- not the task! 
+  // cy.route({
+  //   method: 'GET',
+  //   url: '/todos',
+  //   response: 'fx:tisa-mix'
+  // }).as('mixedList')
+
+  cy.route({
+    method: 'POST',
+    url: '/todos',
+    status: 404,
+    response: {
+      error: "Some text"
+    }
+  }).as('post')
+
 
   cy
     .visit('localhost:3000');
@@ -21,7 +55,19 @@ beforeEach( () => {
   you can do that manually or using a fixture
 */
 it('has 0 todo items', () => {
-  
+
+
+  // case 1
+  // cy.route({
+  //   method: 'GET',
+  //   url: '/todos',
+  //   response: []
+  // }).as('emptyList')
+
+
+  cy.wait("@emptyList")
+
+  cy.get('.todo').should('have.length', 0)
 });
 
 /* 
@@ -29,7 +75,9 @@ it('has 0 todo items', () => {
   test. try to include a compled todo item too
 */
 it('has n todo items (loaded from fixture)', () => {
-  
+  cy.wait('@testList')
+
+  cy.get('.todo').should('have.length', 4)
 });
 
 /* 
@@ -42,17 +90,28 @@ it('shows error when adding new item', () => {
   cy
     .get('.new-todo')
     .type('buy milk{enter}');
-  
+
+  cy.wait('@errorList')
+  cy.get('#errorMessage')
+    .should('have.text', 'Sorry. There was an error creating todo item.')
+    .should('be.visible')
+
 });
 
 /* 
   🤓 challenge #4: manipulate the POST /todos request in such a way that 
   it will create a completed todo item instead of incomplete one
 */
-it('creates completed todo item', () => {
+it.only('creates completed todo item', () => {
 
   cy
     .get('.new-todo')
-    .type('buy milk{enter}');
-  
+    .type('body item{enter}');
+
+  cy.wait('@post')
+
+
+
+
+
 });
