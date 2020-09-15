@@ -1,4 +1,15 @@
 {
-  "todos": [],
-  "accounts": []
+  "todos": [
+    {
+      "title": "bunny stew 2",
+      "completed": false,
+      "id": "6542977212"
+    }
+  ],
+  "accounts": [
+    {
+      "email": "admin@udemy-cypress-course.com",
+      "password": "admin"
+    }
+  ]
 }

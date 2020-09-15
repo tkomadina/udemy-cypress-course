@@ -38,6 +38,4 @@ it.only('creates completed todo item', () => {
 
     cy.wait('@completed')
 
-
-
 });

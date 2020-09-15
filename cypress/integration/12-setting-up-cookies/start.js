@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-beforeEach( () => {
+beforeEach(() => {
 
   cy
     .request('POST', 'localhost:3000/accounts/seed', [
@@ -12,7 +12,7 @@ beforeEach( () => {
 
 });
 
-it.only('Logs in a user', () => {
+it('Logs in a user', () => {
 
   cy
     .visit('localhost:3000/login');
@@ -33,11 +33,21 @@ it.only('Logs in a user', () => {
     .get('#loginMessage')
     .should('be.visible')
     .should('contain.text', 'User is logged in');
-  
+
+  cy
+    .url()
+    .should('eq', 'http://localhost:3000/')
+
+  cy
+    .getCookie('auth')
+    .its('value')
+    .should('eq', 'true')
+
 });
 
-it('is logged in', () => {
+it.only('is logged in', () => {
 
+  cy.setCookie('auth', 'true')
   cy
     .visit('localhost:3000');
 
@@ -45,5 +55,5 @@ it('is logged in', () => {
     .get('#loginMessage')
     .should('be.visible')
     .should('contain.text', 'User is logged in');
-  
+
 });
