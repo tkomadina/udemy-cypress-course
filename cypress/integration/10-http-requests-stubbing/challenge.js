@@ -1,7 +1,6 @@
 /// <reference types="cypress" />
 
 /* 
-  ⚠️ remember you can run single test by using it.only
   ⚠️ most of the work on this challenge will take place in 
   beforeEach() hook. you need to call .server() and .route() 
   commands before you open your app, or more precisely - before 
@@ -12,37 +11,11 @@
 beforeEach(() => {
   cy.server()
 
-  // case 2
-  // cy.route({
-  //   method: 'GET',
-  //   url: '/todos',
-  //   response: 'fx:tisa-test'
-  // }).as('testList')
-
-  // //case 3
-  // cy.route({
-  //   method: 'POST',
-  //   url: '/todos',
-  //   response: [],
-  //   status: 500
-  // }).as('errorList')
-
-  // case 4
-  // -- not the task! 
-  // cy.route({
-  //   method: 'GET',
-  //   url: '/todos',
-  //   response: 'fx:tisa-mix'
-  // }).as('mixedList')
-
   cy.route({
     method: 'POST',
     url: '/todos',
-    status: 404,
-    response: {
-      error: "Some text"
-    }
-  }).as('post')
+    response: { completed: true }
+  }).as('completed')
 
 
   cy
@@ -108,10 +81,6 @@ it.only('creates completed todo item', () => {
     .get('.new-todo')
     .type('body item{enter}');
 
-  cy.wait('@post')
-
-
-
-
+  cy.wait('@completed')
 
 });

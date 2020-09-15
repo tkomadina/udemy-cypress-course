@@ -7,13 +7,31 @@
   💡 there is a LOT you can do with .request() command. read
   about it in documentation https://on.cypress.io/request and
   have some fun with it!
-*/ 
+*/
 
-beforeEach( () => {
+beforeEach(() => {
 
   cy
     .request('DELETE', 'localhost:3000/todos');
-    
+
+  cy.request(
+    "POST",
+    "localhost:3000/todos/seed",
+    [{
+      "title": "bunny poo",
+      "completed": true,
+    },
+    {
+      "title": "doggy bags needed",
+      "completed": false
+    }]
+  )
+
+
+  cy
+    .visit('localhost:3000');
+
+
 });
 
 /* 
@@ -21,7 +39,9 @@ beforeEach( () => {
   to check that the todo item was requested
 */
 it('creates a todo via api', () => {
-  
+
+  cy.contains('bunny poo').should('be.visible')
+
 });
 
 /* 
@@ -31,7 +51,9 @@ it('creates a todo via api', () => {
   is there and it is completed
 */
 it('creates a completed todo item', () => {
-  
+  cy.contains('bunny poo').should('be.visible')
+  cy.get('.todo').eq(0).should('contain', 'bunny poo').and('have.class', 'completed')
+
 });
 
 /* 
@@ -40,7 +62,9 @@ it('creates a completed todo item', () => {
   that you have seeded the app correctly
 */
 it('seeds data before opening the app', () => {
-  
+
+  cy.get('#todo-list').children().should('have.length', 2)
+
 });
 
 /* 
@@ -50,6 +74,14 @@ it('seeds data before opening the app', () => {
   in this test is to find the id of your todo. hint: use .route(), .wait() 
   and .then() command to achieve this.
 */
-it('deletes created todo item via api', () => {
-  
+it.only('deletes created todo item via api', () => {
+
+  // item is created in the before hook 
+
+  // send request to complete the item - we need to find the ID of the item in question 
+
+  // reload the app
+  cy.reload()
+
+  //check if the item is completed 
 });
