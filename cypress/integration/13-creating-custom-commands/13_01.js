@@ -1,8 +1,4 @@
 /// <reference types="cypress" />
-Cypress.Commands.add('deleteTodo', name => {
-
-
-})
 
 beforeEach(() => {
 
@@ -13,7 +9,6 @@ beforeEach(() => {
 
     cy
         .visit('localhost:3000');
-
 });
 
 /* 
@@ -27,16 +22,9 @@ it('deletes a todo', () => {
     cy.addTodo('bunny stew 1')
         .addTodo('bunny stew 2')
 
-
     cy.deleteTodo()
 
-    cy.wait('@create').then(item => {
-        cy.log(item.responseBody.id)
-        cy.request('DELETE', `localhost:3000/todos/${item.responseBody.id}`);
-
-    })
-
-    cy.reload()
-
-
 });
+
+// NOTE to the future self: How would you create a test that would wait for something in a POST request, 
+// then would take that value (i.e. id) and delete the item based on that? 
